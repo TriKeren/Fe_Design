@@ -1,0 +1,81 @@
+{
+    "products": [
+        {
+            "name": "Minimalist Furniture",
+            "category": "Mobile",
+            "image": "../images/furniture.png",
+            "price": "20.000",
+            "discount": {
+                "amount": 40,
+                "type": "percentage"
+            },
+            "options": "premium"
+        },
+        {
+            "name": "Car Shop",
+            "category": "Mobile",
+            "image": "../images/carshop.png",
+            "price": "20.000",
+            "discount": {
+                "amount": 40,
+                "type": "percentage"
+            },
+            "options": "free"
+        },
+        {
+            "name": "Courses",
+            "category": "Mobile",
+            "image": "../images/courses.png",
+            "price": "20.000",
+            "discount": {
+                "amount": 40,
+                "type": "percentage"
+            },
+            "options": "premium"
+        },
+        {
+            "name": "Handy Nest",
+            "category": "Website",
+            "image": "../images/handynest.png",
+            "price": "20.000",
+            "discount": {
+                "amount": 40,
+                "type": "percentage"
+            },
+            "options": "free"
+        },
+        {
+            "name": "Sara's Shop",
+            "category": "Website",
+            "image": "../images/makeup.png",
+            "price": "20.000",
+            "discount": {
+                "amount": 40,
+                "type": "percentage"
+            },
+            "options": "premium"
+        },
+        {
+            "name": "RhytMix",
+            "category": "Mobile",
+            "image": "../images/rhytm-mix.png",
+            "price": "20.000",
+            "discount": {
+                "amount": 40,
+                "type": "percentage"
+            },
+            "options": "free"
+        },
+        {
+            "name": "Cooking",
+            "category": "Mobile",
+            "image": "../images/cooking.png",
+            "price": "20.000",
+            "discount": {
+                "amount": 40,
+                "type": "percentage"
+            },
+            "options": "premium"
+        }
+    ]
+}
