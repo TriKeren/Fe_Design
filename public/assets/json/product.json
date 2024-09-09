@@ -1,9 +1,10 @@
 {
     "products": [
         {
+            "id" : "1",
             "name": "Minimalist Furniture",
             "category": "Mobile",
-            "image": "../images/furniture.png",
+            "image": "https://cdn.dribbble.com/userupload/16477935/file/original-a2ac9c67cf02291c8b2781f23bc6c765.png?resize=450x338&vertical=center",
             "price": "20.000",
             "discount": {
                 "amount": 40,
@@ -12,6 +13,7 @@
             "options": "premium"
         },
         {
+            "id" : "2",
             "name": "Car Shop",
             "category": "Mobile",
             "image": "../images/carshop.png",
@@ -23,6 +25,7 @@
             "options": "free"
         },
         {
+            "id" : "3",
             "name": "Courses",
             "category": "Mobile",
             "image": "../images/courses.png",
@@ -34,6 +37,7 @@
             "options": "premium"
         },
         {
+            "id" : "4",
             "name": "Handy Nest",
             "category": "Website",
             "image": "../images/handynest.png",
@@ -45,6 +49,7 @@
             "options": "free"
         },
         {
+            "id" : "5",
             "name": "Sara's Shop",
             "category": "Website",
             "image": "../images/makeup.png",
@@ -56,6 +61,7 @@
             "options": "premium"
         },
         {
+            "id" : "6",
             "name": "RhytMix",
             "category": "Mobile",
             "image": "../images/rhytm-mix.png",
@@ -67,6 +73,7 @@
             "options": "free"
         },
         {
+            "id" : "7",
             "name": "Cooking",
             "category": "Mobile",
             "image": "../images/cooking.png",
