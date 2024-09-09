@@ -1,7 +1,8 @@
 const DetailPage = () => {
     return ( 
         <>
-        <div className="">lkcjslcosoijhjkjhjikujhjikujhjikujh</div></>
+        
+        </>
      );
 }
  
