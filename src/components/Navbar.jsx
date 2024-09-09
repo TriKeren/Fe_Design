@@ -37,7 +37,7 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className={`sticky top-0 left-0 w-full z-10 py-4 md:px-8 lg:px-20 lg:max-w-screen-xl lg:mx-auto transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md shadow-md' : 'bg-transparent shadow-none'}`}>
+            <nav className={`sticky top-0 left-0 w-full z-10 py-4 md:px-8 lg:px-4 lg:max-w-screen-xl lg:mx-auto transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md shadow-md' : 'bg-transparent shadow-none'}`}>
                 <div className="container">
                     <div className={`flex items-center justify-between ${view ? 'relative' : ''}`}>
                         <div className="flex px-4 text-center">
