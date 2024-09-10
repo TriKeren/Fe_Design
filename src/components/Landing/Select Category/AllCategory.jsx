@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'; // Import Link dari react-router-dom
+import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import data from '/public/assets/json/product.json';
 
