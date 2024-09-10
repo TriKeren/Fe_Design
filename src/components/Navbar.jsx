@@ -1,31 +1,25 @@
 import { useState, useEffect } from "react";
+
 const Navbar = () => {
     const [view, setView] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(null);
 
     const toggleMenu = () => {
         setView(!view);
     };
 
     const handleScroll = () => {
-        const offset = window.scrollY;
-        setScrolled(offset > 50);
-    };
-
-    const handleItemClick = (index, sectionId) => {
-        setActiveIndex(index);
-
-        if (sectionId === 'top') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-            const section = document.getElementById(sectionId);
-            if (section) {
-                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const heroSection = document.getElementById("hero-section");
+        if (heroSection) {
+            const offset = window.scrollY;
+            const heroBottom = heroSection.getBoundingClientRect().bottom;
+            
+            if (offset > heroBottom - 50) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
             }
         }
-
-        window.history.pushState(null, '', window.location.pathname);
     };
 
     useEffect(() => {
@@ -37,7 +31,7 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className={`sticky top-0 left-0 w-full z-10 py-4 md:py-0 md:px-8 lg:px-4 lg:max-w-screen-xl lg:mx-auto transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md shadow-md' : 'bg-transparent shadow-none'}`}>
+            <nav className={`sticky top-0 left-0 w-full z-10 py-4 md:py-0 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md shadow-md' : 'bg-[#D9D9D9]'} lg:px-4 lg:max-w-screen-xl lg:mx-auto`}>
                 <div className="container">
                     <div className={`flex items-center justify-between ${view ? 'relative' : ''}`}>
                         <div className="flex px-4 text-center">
@@ -73,16 +67,16 @@ const Navbar = () => {
                                             className="flex py-2 text-base transition-all duration-500 ease-in-out text-dark md:mx-4"
                                             onClick={(e) => { e.preventDefault(); handleItemClick(0, 'top'); }}
                                         >
-                                            <div className={`${activeIndex === 0 ? 'transform scale-110' : ''}`}>Home</div>
+                                            <div>Home</div>
                                         </a>
                                     </li>
                                     <li className="relative group">
                                         <a
                                             href="#"
-                                            className={`text-base text-dark py-2 md:mx-4 flex ${activeIndex === 1 ? 'text-blue-500' : ''}`}
+                                            className="text-base text-dark py-2 md:mx-4 flex"
                                             onClick={(e) => { e.preventDefault(); handleItemClick(1, 'features'); }}
                                         >
-                                            <div className={`${activeIndex === 1 ? 'transform scale-110' : ''}`}>Template Design</div>
+                                            <div>Template Design</div>
                                         </a>
                                     </li>
                                     <li className="mt-4 lg:hidden">
