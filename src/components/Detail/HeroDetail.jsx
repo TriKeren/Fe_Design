@@ -1,19 +1,30 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Skeleton from './Skeleton';
 
-const ProductDetail = () => {
+const HeroDetail = () => {
+    const { id } = useParams(); // Mengambil ID dari URL
     const [product, setProduct] = useState(null);
+    const [error, setError] = useState(false);
 
-    // Fetch data dari file JSON
     useEffect(() => {
-        fetch('/public/assets/json/product.json')
+        // Fetch data dari file JSON
+        fetch('/assets/json/product.json')  // Perbaiki path di sini
             .then((response) => response.json())
             .then((data) => {
-                const selectedProduct = data.products.find(product => product.id === "1");
-                setProduct(selectedProduct);
+                const selectedProduct = data.products.find(product => product.id === id); // Bandingkan ID sebagai string
+                if (selectedProduct) {
+                    setProduct(selectedProduct);
+                } else {
+                    setError(true);
+                }
             })
-            .catch((error) => console.error('Error fetching data:', error));
-    }, []);
+            .catch(() => setError(true));
+    }, [id]);
+
+    if (error) {
+        return <div className="container mx-auto p-4 lg:p-8">Product not found.</div>;
+    }
 
     if (!product) {
         return <Skeleton />;
@@ -26,7 +37,7 @@ const ProductDetail = () => {
                 <p>
                     This product is available in
                     <a href="#" className="text-blue-500 underline ml-1 hover:text-blue-600">
-                        {product.options} 
+                        {product.options}
                     </a>
                 </p>
             </div>
@@ -40,9 +51,7 @@ const ProductDetail = () => {
                     />
                     <div className="mt-4">
                         <h2 className="text-2xl font-semibold mb-2">{product.name}</h2>
-                        <p className="text-gray-600">
-                            {product.description}
-                        </p>
+                        <p className="text-gray-600">{product.description}</p>
                     </div>
                 </div>
 
@@ -50,9 +59,8 @@ const ProductDetail = () => {
                     <h3 className="text-xl font-semibold mb-4">Get the Product Now!</h3>
                     <p className="text-gray-700">
                         Hello folks, this time I explored about Job Finder Mobile App. This is my new product of UI/UX Kits, this product is pretty much a unique design.
-                        <br/>
                     </p>
-                    <p className='mt-2'>Category in <strong>{product.category}</strong></p>
+                    <p className="mt-2">Category in <strong>{product.category}</strong></p>
                     <div className="gap-2 my-5">
                         {product.features.map((feature, index) => (
                             <div key={index} className="flex items-center gap-2 text-center">
@@ -60,7 +68,7 @@ const ProductDetail = () => {
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
                                     fill="currentColor"
-                                    className="size-6"
+                                    className="w-6 h-6"
                                 >
                                     <path
                                         fillRule="evenodd"
@@ -81,4 +89,4 @@ const ProductDetail = () => {
     );
 };
 
-export default ProductDetail;
+export default HeroDetail;

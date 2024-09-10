@@ -26,7 +26,7 @@ const FreeCategory = () => {
   }, []);
 
   return (
-    <div className="max-w-screen-xl mx-auto p-6 mt-10">
+    <div className="max-w-screen-xl mx-auto p-6 mt-5 md:mt-10">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading
           ? // Render skeleton loader while loading is true
