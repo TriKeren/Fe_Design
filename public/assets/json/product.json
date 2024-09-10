@@ -1,81 +1,144 @@
 {
-    "products": [
-        {
-            "name": "Minimalist Furniture",
-            "category": "Mobile",
-            "image": "../images/furniture.png",
-            "price": "20.000",
-            "discount": {
-                "amount": 40,
-                "type": "percentage"
-            },
-            "options": "premium"
-        },
-        {
-            "name": "Car Shop",
-            "category": "Mobile",
-            "image": "../images/carshop.png",
-            "price": "20.000",
-            "discount": {
-                "amount": 40,
-                "type": "percentage"
-            },
-            "options": "free"
-        },
-        {
-            "name": "Courses",
-            "category": "Mobile",
-            "image": "../images/courses.png",
-            "price": "20.000",
-            "discount": {
-                "amount": 40,
-                "type": "percentage"
-            },
-            "options": "premium"
-        },
-        {
-            "name": "Handy Nest",
-            "category": "Website",
-            "image": "../images/handynest.png",
-            "price": "20.000",
-            "discount": {
-                "amount": 40,
-                "type": "percentage"
-            },
-            "options": "free"
-        },
-        {
-            "name": "Sara's Shop",
-            "category": "Website",
-            "image": "../images/makeup.png",
-            "price": "20.000",
-            "discount": {
-                "amount": 40,
-                "type": "percentage"
-            },
-            "options": "premium"
-        },
-        {
-            "name": "RhytMix",
-            "category": "Mobile",
-            "image": "../images/rhytm-mix.png",
-            "price": "20.000",
-            "discount": {
-                "amount": 40,
-                "type": "percentage"
-            },
-            "options": "free"
-        },
-        {
-            "name": "Cooking",
-            "category": "Mobile",
-            "image": "../images/cooking.png",
-            "price": "20.000",
-            "discount": {
-                "amount": 40,
-                "type": "percentage"
-            },
-            "options": "premium"
-        }
-    ]
+  "products": [
+    {
+      "id": "1",
+      "name": "Minimalist Furniture",
+      "category": "Mobile",
+      "image": "https://cdn.dribbble.com/userupload/16477935/file/original-a2ac9c67cf02291c8b2781f23bc6c765.png?resize=450x338&vertical=center",
+      "price": "20.000",
+      "discount": {
+        "amount": 40,
+        "type": "percentage"
+      },
+      "options": "premium",
+      "description": " Minimalist furniture emphasizes simplicity, clean lines, and a functional design. It focuses on eliminating unnecessary elements, using neutral colors, and incorporating natural materials like wood and metal. This style is often characterized by open spaces, uncluttered surfaces, and a balance between form and function, creating a calm and organized environment. Minimalist furniture is designed to be practical while maintaining an elegant, understated aesthetic.",
+      "features": [
+        "Figma Auto-Layout",
+        "100% Easy to Customize",
+        "Modern & Pixel Perfect",
+        "Flexible & Reusable",
+        "Layered & Well Organized"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Car Shop",
+      "category": "Mobile",
+      "image": "https://cdn.dribbble.com/userupload/13467377/file/original-88bc8b1365a9f0b707621c6d88add376.png?resize=400x0",
+      "price": "20.000",
+      "discount": {
+        "amount": 40,
+        "type": "percentage"
+      },
+      "options": "free",
+      "description": " Minimalist furniture emphasizes simplicity, clean lines, and a functional design. It focuses on eliminating unnecessary elements, using neutral colors, and incorporating natural materials like wood and metal. This style is often characterized by open spaces, uncluttered surfaces, and a balance between form and function, creating a calm and organized environment. Minimalist furniture is designed to be practical while maintaining an elegant, understated aesthetic.",
+      "features": [
+        "Figma Auto-Layout",
+        "100% Easy to Customize",
+        "Modern & Pixel Perfect",
+        "Flexible & Reusable",
+        "Layered & Well Organized"
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Courses",
+      "category": "Mobile",
+      "image": "https://images-platform.99static.com//XPnaPYAxQuBcZVWBWB5dgLRWDlw=/0x0:1920x1920/fit-in/500x500/projects-files/127/12773/1277333/965ddce2-1f24-4d36-8919-e863e1565df8.png",
+      "price": "20.000",
+      "discount": {
+        "amount": 40,
+        "type": "percentage"
+      },
+      "options": "premium",
+      "description": " Minimalist furniture emphasizes simplicity, clean lines, and a functional design. It focuses on eliminating unnecessary elements, using neutral colors, and incorporating natural materials like wood and metal. This style is often characterized by open spaces, uncluttered surfaces, and a balance between form and function, creating a calm and organized environment. Minimalist furniture is designed to be practical while maintaining an elegant, understated aesthetic.",
+      "features": [
+        "Figma Auto-Layout",
+        "100% Easy to Customize",
+        "Modern & Pixel Perfect",
+        "Flexible & Reusable",
+        "Layered & Well Organized"
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Handy Nest",
+      "category": "Website",
+      "image": "https://html.design/wp-content/uploads/2024/01/cleaner-html-758x948.jpg",
+      "price": "20.000",
+      "discount": {
+        "amount": 40,
+        "type": "percentage"
+      },
+      "options": "free",
+      "description": " Minimalist furniture emphasizes simplicity, clean lines, and a functional design. It focuses on eliminating unnecessary elements, using neutral colors, and incorporating natural materials like wood and metal. This style is often characterized by open spaces, uncluttered surfaces, and a balance between form and function, creating a calm and organized environment. Minimalist furniture is designed to be practical while maintaining an elegant, understated aesthetic.",
+      "features": [
+        "Figma Auto-Layout",
+        "100% Easy to Customize",
+        "Modern & Pixel Perfect",
+        "Flexible & Reusable",
+        "Layered & Well Organized"
+      ]
+    },
+    {
+      "id": "5",
+      "name": "Sara's Shop",
+      "category": "Website",
+      "image": "https://mir-s3-cdn-cf.behance.net/project_modules/disp/445fe518757675.5603f03816ac3.jpg",
+      "price": "20.000",
+      "discount": {
+        "amount": 40,
+        "type": "percentage"
+      },
+      "options": "premium",
+      "description": " Minimalist furniture emphasizes simplicity, clean lines, and a functional design. It focuses on eliminating unnecessary elements, using neutral colors, and incorporating natural materials like wood and metal. This style is often characterized by open spaces, uncluttered surfaces, and a balance between form and function, creating a calm and organized environment. Minimalist furniture is designed to be practical while maintaining an elegant, understated aesthetic.",
+      "features": [
+        "Figma Auto-Layout",
+        "100% Easy to Customize",
+        "Modern & Pixel Perfect",
+        "Flexible & Reusable",
+        "Layered & Well Organized"
+      ]
+    },
+    {
+      "id": "6",
+      "name": "RhytMix",
+      "category": "Mobile",
+      "image": "https://cdn.dribbble.com/users/2797227/screenshots/15594831/media/f0017dabc6c8facf2b4c51eb8488097b.png?resize=400x300&vertical=centerg",
+      "price": "20.000",
+      "discount": {
+        "amount": 40,
+        "type": "percentage"
+      },
+      "options": "free",
+      "description": " Minimalist furniture emphasizes simplicity, clean lines, and a functional design. It focuses on eliminating unnecessary elements, using neutral colors, and incorporating natural materials like wood and metal. This style is often characterized by open spaces, uncluttered surfaces, and a balance between form and function, creating a calm and organized environment. Minimalist furniture is designed to be practical while maintaining an elegant, understated aesthetic.",
+      "features": [
+        "Figma Auto-Layout",
+        "100% Easy to Customize",
+        "Modern & Pixel Perfect",
+        "Flexible & Reusable",
+        "Layered & Well Organized"
+      ]
+    },
+    {
+      "id": "7",
+      "name": "Cooking",
+      "category": "Mobile",
+      "image": "https://s3-alpha.figma.com/hub/file/2302254941/61453b2a-2843-487a-93f7-d0e984b2d316-cover.png",
+      "price": "20.000",
+      "discount": {
+        "amount": 40,
+        "type": "percentage"
+      },
+      "options": "premium",
+      "description": " Minimalist furniture emphasizes simplicity, clean lines, and a functional design. It focuses on eliminating unnecessary elements, using neutral colors, and incorporating natural materials like wood and metal. This style is often characterized by open spaces, uncluttered surfaces, and a balance between form and function, creating a calm and organized environment. Minimalist furniture is designed to be practical while maintaining an elegant, understated aesthetic.",
+      "features": [
+        "Figma Auto-Layout",
+        "100% Easy to Customize",
+        "Modern & Pixel Perfect",
+        "Flexible & Reusable",
+        "Layered & Well Organized"
+      ]
+    }
+  ]
 }
