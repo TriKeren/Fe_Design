@@ -4,18 +4,17 @@ import PremiumCategory from "./Select Category/PremiumCategory";
 import FreeCategory from "./Select Category/FreeCategory";
 
 const Category = () => {
-  // State untuk menyimpan kategori yang dipilih
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  // Fungsi untuk mengubah kategori yang dipilih
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
   return (
     <>
-      <div className="flex justify-center items-center mt-5 text-[#020E35]">
-        <div className="grid grid-cols-3 gap-2 md:grid-cols-3 font-merriweather cursor-pointer">
+      <div className="flex justify-center items-center mt-12 text-[#020E35]">
+        {/* Container untuk opsi kategori yang bisa di-scroll pada tampilan mobile */}
+        <div className="flex overflow-x-auto whitespace-nowrap md:grid md:grid-cols-3 gap-2 font-merriweather cursor-pointer">
           <h1
             onClick={() => handleCategoryChange("all")}
             className={`font-medium hover:bg-blue-600 rounded-full border-[1px] border-black hover:text-white duration-300 py-2 px-6 md:px-5 text-center md:text-center ${
@@ -43,10 +42,10 @@ const Category = () => {
         </div>
       </div>
 
-      {/* Render based on selected category */}
+      {/* Render content based on selected category */}
       {selectedCategory === "all" && <AllCategory />}
       {selectedCategory === "premium" && <PremiumCategory />}
-      {selectedCategory === "free" && <FreeCategory/>}
+      {selectedCategory === "free" && <FreeCategory />}
     </>
   );
 };
