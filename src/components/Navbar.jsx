@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
     const [view, setView] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate(); // Tambahkan useNavigate
 
     const toggleMenu = () => {
         setView(!view);
@@ -41,6 +42,10 @@ const Navbar = () => {
             setScrolled(true);
         }
     }, [location]);
+
+    const goToLogin = () => {
+        navigate("/login");
+    };
 
     return (
         <>
@@ -130,7 +135,7 @@ const Navbar = () => {
                             </div>
                         </div>
                         <div className="hidden lg:flex items-center gap-2">
-                            <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-500">
+                            <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-500" onClick={goToLogin}>
                                 Login
                             </button>
                             <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl md:w-20 whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black">
