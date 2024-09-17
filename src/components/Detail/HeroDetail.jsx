@@ -1,25 +1,51 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { supabase } from '../../supabase/supaclient';
 import Skeleton from './Skeleton';
 
 const HeroDetail = () => {
-    const { id } = useParams(); // Mengambil ID dari URL
+    const { id } = useParams();
     const [product, setProduct] = useState(null);
+    const [categoryName, setCategoryName] = useState('');
     const [error, setError] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // Fetch data dari file JSON
-        fetch('/assets/json/product.json')  // Perbaiki path di sini
-            .then((response) => response.json())
-            .then((data) => {
-                const selectedProduct = data.products.find(product => product.id === id); // Bandingkan ID sebagai string
-                if (selectedProduct) {
-                    setProduct(selectedProduct);
-                } else {
+        const fetchProductAndCategory = async () => {
+            try {
+                const { data: productData, error: productError } = await supabase
+                    .from('products')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
+
+                if (productError) {
                     setError(true);
+                    console.error(productError);
+                    return;
                 }
-            })
-            .catch(() => setError(true));
+
+                setProduct(productData);
+
+                const { data: categoryData, error: categoryError } = await supabase
+                    .from('categories')
+                    .select('name')
+                    .eq('id', productData.category_id)
+                    .single();
+
+                if (categoryError) {
+                    setError(true);
+                    console.error(categoryError);
+                } else {
+                    setCategoryName(categoryData.name);
+                }
+            } catch (error) {
+                setError(true);
+                console.error('Error fetching product and category:', error);
+            }
+        };
+
+        fetchProductAndCategory();
     }, [id]);
 
     if (error) {
@@ -33,24 +59,30 @@ const HeroDetail = () => {
     return (
         <section className="container mx-auto p-4 lg:p-8">
             <div className="mb-6">
-                <h1 className="text-3xl font-bold">{product.name}</h1>
+                <button onClick={() => navigate(-1)} className='mb-4 bg-transparent'>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                </button>
+
+                <h1 className="text-3xl font-bold">{product.title}</h1>
                 <p>
-                    This product is available in
-                    <a href="#" className="text-blue-500 underline ml-1 hover:text-blue-600">
-                        {product.options}
-                    </a>
+                    This product is available as
+                    <span className="text-blue-500 ml-1">
+                        {product.is_premium ? 'Premium' : 'Free'}
+                    </span>
                 </p>
             </div>
 
             <div className="flex flex-col lg:flex-row lg:space-x-8">
                 <div className="lg:w-2/3">
                     <img
-                        src={product.image}
-                        alt={product.name}
+                        src={product.cover}
+                        alt={product.title}
                         className="w-full h-auto mb-4"
                     />
                     <div className="mt-4">
-                        <h2 className="text-2xl font-semibold mb-2">{product.name}</h2>
+                        <h2 className="text-2xl font-semibold mb-2">{product.title}</h2>
                         <p className="text-gray-600">{product.description}</p>
                     </div>
                 </div>
@@ -60,9 +92,9 @@ const HeroDetail = () => {
                     <p className="text-gray-700">
                         Hello folks, this time I explored about Job Finder Mobile App. This is my new product of UI/UX Kits, this product is pretty much a unique design.
                     </p>
-                    <p className="mt-2">Category in <strong>{product.category}</strong></p>
+                    <p className="mt-2">Category in <strong>{categoryName}</strong></p>
                     <div className="gap-2 my-5">
-                        {product.features.map((feature, index) => (
+                        {product.features && product.features.map((feature, index) => (
                             <div key={index} className="flex items-center gap-2 text-center">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +113,7 @@ const HeroDetail = () => {
                         ))}
                     </div>
                     <button className="bg-blue-500 text-white py-2 px-6 rounded-lg transition duration-300 ease-in-out hover:bg-blue-600">
-                        Buy Now
+                        {product.is_premium ? 'Buy Now' : 'Download Free'}
                     </button>
                 </div>
             </div>
