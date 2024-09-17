@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { supabase } from "../supabase/supaclient"; // Pastikan Anda mengimpor supabase client
 
 const Navbar = () => {
     const [view, setView] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false); // State to track user authentication
     const location = useLocation();
-    const navigate = useNavigate(); // Tambahkan useNavigate
+    const navigate = useNavigate(); 
 
     const toggleMenu = () => {
         setView(!view);
@@ -24,7 +26,6 @@ const Navbar = () => {
                 setScrolled(false);
             }
         } else {
-            // Jika hero-section tidak ada, navbar selalu scrolled
             setScrolled(true);
         }
     };
@@ -43,6 +44,16 @@ const Navbar = () => {
         }
     }, [location]);
 
+    useEffect(() => {
+        const checkUserAuth = async () => {
+            const { data: session } = await supabase.auth.getSession();
+            if (session?.session) {
+                setIsAuthenticated(true);
+            }
+        };
+        checkUserAuth();
+    }, []);
+
     const goToLogin = () => {
         navigate("/login");
     };
@@ -51,9 +62,7 @@ const Navbar = () => {
         <>
             <nav
                 className={`sticky top-0 left-0 w-full z-10 py-4 md:py-0 transition-all duration-300 ${
-                    scrolled
-                        ? "bg-white/80 backdrop-blur-md"
-                        : "bg-[#D9D9D9]"
+                    scrolled ? "bg-white/80 backdrop-blur-md" : "bg-[#D9D9D9]"
                 } lg:px-4 lg:max-w-screen-xl lg:mx-auto`}
             >
                 <div className="container">
@@ -121,27 +130,39 @@ const Navbar = () => {
                                             Template Design
                                         </a>
                                     </li>
-                                    <li className="mt-4 lg:hidden">
-                                        <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap lg:mr-0 hover:bg-blue-500">
-                                            Login
-                                        </button>
-                                    </li>
-                                    <li className="mt-2 lg:hidden">
-                                        <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black">
-                                            Join Now
-                                        </button>
-                                    </li>
+                                    {!isAuthenticated && (
+                                        <>
+                                            <li className="mt-4 lg:hidden">
+                                                <button
+                                                    className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap lg:mr-0 hover:bg-blue-500"
+                                                    onClick={goToLogin}
+                                                >
+                                                    Login
+                                                </button>
+                                            </li>
+                                            <li className="mt-2 lg:hidden">
+                                                <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black">
+                                                    Join Now
+                                                </button>
+                                            </li>
+                                        </>
+                                    )}
                                 </ul>
                             </div>
                         </div>
-                        <div className="hidden lg:flex items-center gap-2">
-                            <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-500" onClick={goToLogin}>
-                                Login
-                            </button>
-                            <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl md:w-20 whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black">
-                                Join Now
-                            </button>
-                        </div>
+                        {!isAuthenticated && (
+                            <div className="hidden lg:flex items-center gap-2">
+                                <button
+                                    className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-500"
+                                    onClick={goToLogin}
+                                >
+                                    Login
+                                </button>
+                                <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl md:w-20 whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black">
+                                    Join Now
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </nav>
