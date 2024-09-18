@@ -4,13 +4,18 @@ export default {
   theme: {
     extend: {
       keyframes: {
-        shimmer: {
-          "0%": { backgroundPosition: "-200px 0" },
-          "100%": { backgroundPosition: "200px 0" },
+        slideDown: {
+          '0%': { transform: 'translateY(-100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(0)', opacity: '1' },
+          '100%': { transform: 'translateY(-100%)', opacity: '0' },
         },
       },
       animation: {
-        shimmer: "shimmer 1.5s infinite linear",
+        slideDown: 'slideDown 0.3s ease-out',
+        slideUp: 'slideUp 0.3s ease-in',
       },
     },
   },

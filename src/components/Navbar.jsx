@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { supabase } from "../supabase/supaclient";
 
 const Navbar = () => {
     const [view, setView] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [user, setUser] = useState(null);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
+    const [notificationVisible, setNotificationVisible] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
     const location = useLocation();
-    const navigate = useNavigate(); // Tambahkan useNavigate
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setView(!view);
     };
 
-    // Detect when user scrolls past the hero section
     const handleScroll = () => {
         const heroSection = document.getElementById("hero-section");
         if (heroSection) {
@@ -24,7 +28,6 @@ const Navbar = () => {
                 setScrolled(false);
             }
         } else {
-            // Jika hero-section tidak ada, navbar selalu scrolled
             setScrolled(true);
         }
     };
@@ -34,17 +37,54 @@ const Navbar = () => {
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-    }, []);
+    }, [])
 
     useEffect(() => {
-        // Set navbar tetap dalam keadaan scrolled ketika di halaman HeroDetail
-        if (location.pathname.includes("/hero-detail")) {
+        const checkUser = async () => {
+            const { data, error } = await supabase.auth.getUser();
+            if (data) {
+                setUser(data.user);
+            } else if (error) {
+                console.error("Error fetching user:", error);
+            }
+        };
+
+        checkUser();
+
+        if (location.pathname.includes("/")) {
             setScrolled(true);
         }
     }, [location]);
 
     const goToLogin = () => {
         navigate("/login");
+    };
+
+    const handleLogout = async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            console.error("Error during logout:", error);
+        } else {
+            setUser(null);
+            setIsClosing(true);
+            setTimeout(() => {
+                setShowLogoutModal(false);
+                setIsClosing(false);
+            }, 300); // Match the animation duration
+        }
+    };
+
+    const openLogoutModal = () => {
+        setShowLogoutModal(true);
+        setNotificationVisible(true);
+    };
+
+    const closeLogoutModal = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            setShowLogoutModal(false);
+            setIsClosing(false);
+        }, 300); // Match the animation duration
     };
 
     return (
@@ -57,11 +97,7 @@ const Navbar = () => {
                 } lg:px-4 lg:max-w-screen-xl lg:mx-auto`}
             >
                 <div className="container">
-                    <div
-                        className={`flex items-center justify-between ${
-                            view ? "relative" : ""
-                        }`}
-                    >
+                    <div className={`flex items-center justify-between ${view ? "relative" : ""}`}>
                         <div className="flex px-4 text-center">
                             <img
                                 className="h-10 mr-2 md:h-10"
@@ -122,9 +158,15 @@ const Navbar = () => {
                                         </a>
                                     </li>
                                     <li className="mt-4 lg:hidden">
-                                        <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap lg:mr-0 hover:bg-blue-500">
-                                            Login
-                                        </button>
+                                        {user ? (
+                                            <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap lg:mr-0 hover:bg-blue-500" onClick={openLogoutModal}>
+                                                Logout
+                                            </button>
+                                        ) : (
+                                            <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap lg:mr-0 hover:bg-blue-500" onClick={goToLogin}>
+                                                Login
+                                            </button>
+                                        )}
                                     </li>
                                     <li className="mt-2 lg:hidden">
                                         <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black">
@@ -135,9 +177,15 @@ const Navbar = () => {
                             </div>
                         </div>
                         <div className="hidden lg:flex items-center gap-2">
-                            <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-500" onClick={goToLogin}>
-                                Login
-                            </button>
+                            {user ? (
+                                <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-500" onClick={openLogoutModal}>
+                                    Logout
+                                </button>
+                            ) : (
+                                <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-500" onClick={goToLogin}>
+                                    Login
+                                </button>
+                            )}
                             <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl md:w-20 whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black">
                                 Join Now
                             </button>
@@ -145,6 +193,26 @@ const Navbar = () => {
                     </div>
                 </div>
             </nav>
+
+            {showLogoutModal && (
+                <div className={`fixed top-[90px] right-4 bg-white shadow-lg p-4 rounded-lg ${isClosing ? 'animate-slideUp' : 'animate-slideDown'}`}>
+                    <p className="text-black">Apakah anda yakin ingin logout?</p>
+                    <div className="mt-4 flex justify-center gap-4">
+                        <button
+                            onClick={handleLogout}
+                            className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                        >
+                            Logout
+                        </button>
+                        <button
+                            onClick={closeLogoutModal}
+                            className="py-2 px-4 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
         </>
     );
 };
