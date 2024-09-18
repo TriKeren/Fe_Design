@@ -4,43 +4,64 @@ import { supabase } from '../../../supabase/supaclient';
 import SkeletonCard from './SkeletonCard';
 
 const PremiumCategory = () => {
-  const [loading, setLoading] = useState(true);
-  const [premiumProducts, setPremiumProducts] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setIsLoading(true);
       const { data, error } = await supabase
         .from('products')
-        .select('*')
-        .eq('is_premium', true);
+        .select(`
+          id,
+          title,
+          cover,
+          is_premium,
+          category_id,
+          categories (name)
+        `)
+        .eq('is_premium', true); // Hanya ambil produk premium (is_premium true)
 
       if (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching premium products:', error);
       } else {
-        setPremiumProducts(data);
+        setTimeout(() => {
+          setProducts(data);
+          setIsLoading(false);
+        }, 1000);
       }
-      setLoading(false);
     };
 
     fetchProducts();
   }, []);
 
   return (
-    <div className="max-w-screen-xl mx-auto p-6 mt-5 md:mt-10">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {loading
-          ? Array(6).fill().map((_, index) => <SkeletonCard key={index} />)
-          : premiumProducts.map(({ id, title, cover, price }) => (
-              <Link key={id} to={`/product/${id}`} className="bg-white shadow-2xl border rounded-2xl overflow-hidden cursor-pointer">
-                <img src={cover} alt={title} className="w-full h-[300px] p-3 rounded-[20px] object-cover" />
-                <div className="px-3 mb-4">
-                  <p className="text-[24px] font-normal mb-4">{title}</p>
-                  <div className="flex justify-between items-center text-[20px]">
-                    <p className="font-bold text-black">Premium</p>
-                    <p className="font-semibold text-blue-600">{price}</p>
-                  </div>
+    <div className="max-w-screen-xl mx-auto p-5 sm:p-10 md:p-16">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+        {isLoading
+          ? <SkeletonCard />
+          : products.map((product) => (
+            <Link
+              key={product.id}
+              to={`/product/${product.id}`}
+              className="rounded-xl overflow-hidden shadow-lg flex flex-col"
+            >
+              <div className="relative">
+                <img className="w-full" src={product.cover} alt={product.title} />
+                <div className="hover:bg-transparent transition duration-300 absolute bottom-0 top-0 right-0 left-0 bg-gray-900 opacity-25"></div>
+                <div className="text-xs absolute top-0 right-0 bg-red-600 rounded-xl px-4 py-2 text-white mt-3 mr-3">
+                  Premium
                 </div>
-              </Link>
+              </div>
+              <div className="px-4 py-4 flex justify-between items-center">
+                <h1 className="font-medium text-lg">
+                  {product.title}
+                </h1>
+                <p className="text-gray-500 text-sm">
+                  {product.categories.name}
+                </p>
+              </div>
+            </Link>
           ))}
       </div>
     </div>
