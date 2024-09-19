@@ -81,10 +81,7 @@ const HeroDetail = () => {
                         alt={product.title}
                         className="w-full h-auto mb-4"
                     />
-                    <div className="mt-4">
-                        <h2 className="text-2xl font-semibold mb-2">{product.title}</h2>
-                        <p className="text-gray-600">{product.description}</p>
-                    </div>
+                   
                 </div>
 
                 <div className="lg:w-1/3 bg-gray-100 p-6 rounded-lg shadow-lg mt-4 lg:mt-0">
@@ -113,7 +110,7 @@ const HeroDetail = () => {
                         ))}
                     </div>
                     <button className="bg-blue-500 text-white py-2 px-6 rounded-lg transition duration-300 ease-in-out hover:bg-blue-600">
-                        {product.is_premium ? 'Buy Now' : 'Download Free'}
+                        {product.is_premium ? 'Download now' : 'Download Free'}
                     </button>
                 </div>
             </div>

@@ -47,7 +47,6 @@ const AllCategory = () => {
             >
               <div className="relative">
                 <img className="w-full" src={product.cover} alt={product.title} />
-                <div className="hover:bg-transparent transition duration-300 absolute bottom-0 top-0 right-0 left-0 bg-gray-900 opacity-25"></div>
                 {product.is_premium && (
                   <div className="text-xs absolute top-0 right-0 bg-red-600 rounded-xl px-4 py-2 text-white mt-3 mr-3">
                     Premium
