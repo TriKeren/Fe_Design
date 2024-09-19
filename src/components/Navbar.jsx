@@ -60,6 +60,10 @@ const Navbar = () => {
         navigate("/login");
     };
 
+    const goToMembership = () => {
+        navigate("/membership")
+    }
+
     const handleLogout = async () => {
         const { error } = await supabase.auth.signOut();
         if (error) {
@@ -169,7 +173,7 @@ const Navbar = () => {
                                         )}
                                     </li>
                                     <li className="mt-2 lg:hidden">
-                                        <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black">
+                                        <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black"  onClick={goToMembership}> 
                                             Join Now
                                         </button>
                                     </li>
@@ -186,7 +190,7 @@ const Navbar = () => {
                                     Login
                                 </button>
                             )}
-                            <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl md:w-20 whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black">
+                            <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl md:w-20 whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black" onClick={goToMembership}>
                                 Join Now
                             </button>
                         </div>

@@ -3,6 +3,7 @@ import LandingPage from "./pages/LandingPage"
 import DetailPage from "./pages/DetailPage"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
+import MembershipPage from "./pages/Membership"
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Route path="/product/:id" element={<DetailPage />} />
       <Route path="/login" element={<Login />}/>
       <Route path="/register" element={<Register />}/>
+      <Route path="/membership" element={<MembershipPage />}/>
     </Routes>
     </BrowserRouter>
   )
