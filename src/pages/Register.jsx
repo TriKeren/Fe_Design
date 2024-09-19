@@ -84,7 +84,7 @@ const Register = () => {
           setModalData({
             isVisible: true,
             message: 'User registered successfully!',
-            isSuccess: true
+            isSuccess: true 
           });
         }
       }
@@ -104,7 +104,7 @@ const Register = () => {
       isVisible: false
     });
     if (modalData.isSuccess) {
-      navigate('/');
+      navigate('/login');
     }
   };
 
@@ -151,20 +151,6 @@ const Register = () => {
               required
             />
           </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700">Membership</label>
-            <select 
-              name="is_membership"
-              value={formData.is_membership}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" 
-              required
-            >
-              <option value="false">Non-Member</option>
-              <option value="true">Member</option>
-            </select>
-          </div>
           
           <button 
             type="submit" 
@@ -186,6 +172,7 @@ const Register = () => {
             <h2 className={`text-xl font-bold mb-4 ${modalData.isSuccess ? 'text-green-500' : 'text-red-500'}`}>
               {modalData.isSuccess ? 'Success' : 'Error'}
             </h2>
+            <h2 className="font-bold">Verifikasi Email Anda</h2>
             <p className="mb-6">{modalData.message}</p>
             <button 
               onClick={closeModal} 
