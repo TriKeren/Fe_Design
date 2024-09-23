@@ -8,6 +8,7 @@ const HeroDetail = () => {
     const [product, setProduct] = useState(null);
     const [categoryName, setCategoryName] = useState('');
     const [error, setError] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -43,25 +44,75 @@ const HeroDetail = () => {
                 setError(true);
                 console.error('Error fetching product and category:', error);
             }
+            setIsLoading(false);
         };
 
         fetchProductAndCategory();
     }, [id]);
 
+    const handleDownload = async () => {
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    
+        if (sessionError || !sessionData.session) {
+            navigate('/login');
+            return;
+        }
+    
+        const user = sessionData.session.user;
+    
+        const { data: userData, error: userError } = await supabase
+            .from('users')
+            .select('id, is_membership')
+            .eq('email', user.email)
+            .single();
+    
+        if (userError) {
+            console.error('Error fetching user data:', userError);
+            return;
+        }
+    
+        if (!userData) {
+            console.error('User not found for email:', user.email);
+            return;
+        }
+    
+        if (product.is_premium) {
+            if (!userData.is_membership) {
+                navigate('/membership');
+                return;
+            }
+    
+            alert('You can download the product now!');
+        } else {
+            alert('You can download the product for free!');
+        }
+    };        
+
     if (error) {
         return <div className="container mx-auto p-4 lg:p-8">Product not found.</div>;
     }
 
-    if (!product) {
+    if (isLoading || !product) {
         return <Skeleton />;
     }
 
     return (
         <section className="container mx-auto p-4 lg:p-8">
             <div className="mb-6">
-                <button onClick={() => navigate(-1)} className='mb-4 bg-transparent'>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                <button onClick={() => navigate(-1)} className="mb-4 bg-transparent">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                        />
                     </svg>
                 </button>
 
@@ -81,35 +132,18 @@ const HeroDetail = () => {
                         alt={product.title}
                         className="w-full h-auto mb-4"
                     />
-                   
                 </div>
 
                 <div className="lg:w-1/3 bg-gray-100 p-6 rounded-lg shadow-lg mt-4 lg:mt-0">
                     <h3 className="text-xl font-semibold mb-4">Get the Product Now!</h3>
                     <p className="text-gray-700">
-                        Hello folks, this time I explored about Job Finder Mobile App. This is my new product of UI/UX Kits, this product is pretty much a unique design.
+                        This is a detailed description of the product, including its features and benefits.
                     </p>
                     <p className="mt-2">Category in <strong>{categoryName}</strong></p>
-                    <div className="gap-2 my-5">
-                        {product.features && product.features.map((feature, index) => (
-                            <div key={index} className="flex items-center gap-2 text-center">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-6 h-6"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                                <p className="mb-1">{feature}</p>
-                            </div>
-                        ))}
-                    </div>
-                    <button className="bg-blue-500 text-white py-2 px-6 rounded-lg transition duration-300 ease-in-out hover:bg-blue-600">
+                    <button
+                        onClick={handleDownload}
+                        className="bg-blue-500 text-white py-2 px-6 rounded-lg transition duration-300 ease-in-out hover:bg-blue-600"
+                    >
                         {product.is_premium ? 'Download now' : 'Download Free'}
                     </button>
                 </div>
