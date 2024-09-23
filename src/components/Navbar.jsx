@@ -199,8 +199,9 @@ const Navbar = () => {
             </nav>
 
             {showLogoutModal && (
-                <div className={`fixed top-[90px] right-4 bg-white shadow-lg p-4 rounded-lg ${isClosing ? 'animate-slideUp' : 'animate-slideDown'}`}>
-                    <p className="text-black">Apakah anda yakin ingin logout?</p>
+            <div className={`fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center`}>
+                <div className={`bg-white shadow-lg p-4 rounded-lg w-[90%] max-w-xs ${isClosing ? 'animate-slideUp' : 'animate-slideDown'}`}>
+                    <p className="text-black text-center">Are you sure you want to log out?</p>
                     <div className="mt-4 flex justify-center gap-4">
                         <button
                             onClick={handleLogout}
@@ -216,7 +217,8 @@ const Navbar = () => {
                         </button>
                     </div>
                 </div>
-            )}
+            </div>
+        )}
         </>
     );
 };
