@@ -195,7 +195,7 @@ const Navbar = () => {
                         <div className="hidden lg:flex items-center gap-2">
                             {user ? (
                                 <button
-                                    className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-lg hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-00"
+                                    className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-lg hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-500"
                                     onClick={openMembershipModal}
                                 >
                                     {user.user_metadata?.name || "User"} {/* Nama Pengguna */}
@@ -238,34 +238,25 @@ const Navbar = () => {
             )}
 
             {showLogoutModal && (
-            <div className={`fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center`}>
-                <div className={`bg-white shadow-lg p-4 rounded-lg w-[90%] max-w-xs ${isClosing ? 'animate-slideUp' : 'animate-slideDown'}`}>
-                    <p className="text-black text-center">Are you sure you want to log out?</p>
-
-                    <div className="mt-4 flex justify-center gap-4">
-                        <button
-                            onClick={handleLogout}
-                            className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                        >
-                            Logout
-                        </button>
-                        <button
-                            onClick={closeLogoutModal}
-                            className="px-4 py-2 bg-gray-300 text-black rounded-md"
-                        >
-                            Cancel
-
-                    <div className="flex justify-between mt-4">
-                        <button className="w-full py-2 mr-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap hover:bg-blue-500" onClick={handleLogout}>
-                            Yes
-                        </button>
-                        <button className="w-full py-2 ml-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl hover:bg-transparent hover:text-black hover:border-black" onClick={closeLogoutModal}>
-                            No
-
-                        </button>
+                <div className={`fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center`}>
+                    <div className={`bg-white shadow-lg p-4 rounded-lg w-[90%] max-w-xs ${isClosing ? "animate-slideUp" : "animate-slideDown"}`}>
+                        <p className="text-black text-center">Are you sure you want to log out?</p>
+                        <div className="mt-4 flex justify-center gap-4">
+                            <button
+                                onClick={handleLogout}
+                                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                            >
+                                Yes
+                            </button>
+                            <button
+                                onClick={closeLogoutModal}
+                                className="px-4 py-2 bg-gray-300 text-black rounded-md"
+                            >
+                                Cancel
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
             )}
         </>
     );
