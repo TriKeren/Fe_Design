@@ -12,40 +12,75 @@ const Category = () => {
 
   return (
     <>
-      <div className="flex justify-center items-center mt-12 text-[#020E35]">
-        {/*tampilan mobile */}
-        <div className="mx-8 md:mx-0 flex overflow-x-auto whitespace-nowrap md:grid md:grid-cols-3 gap-2 font-merriweather cursor-pointer">
-          <h1
+      {/* Tabs Section */}
+      <div className="max-w-screen-xl mx-auto flex justify-center items-center mt-12 text-[#020E35]">
+        <div className="relative mx-8 md:mx-0 bg-gray-100 rounded-lg p-1 md:w-1/2 flex justify-between items-center">
+          
+          {/* Background biru yang bergeser */}
+          <div
+            className={`absolute top-0 h-full w-1/3 bg-blue-700 rounded-lg transition-all duration-300 ease-in-out ${
+              selectedCategory === "all" ? "left-0" :
+              selectedCategory === "free" ? "left-1/3" : "left-2/3"
+            }`}
+          ></div>
+
+          {/* All Category */}
+          <div
             onClick={() => handleCategoryChange("all")}
-            className={`font-medium hover:bg-blue-600 rounded-full border-[1px] border-black hover:text-white duration-300 py-2 px-6 md:px-5 text-center md:text-center ${
-              selectedCategory === "all" ? "bg-blue-600 text-white" : ""
+            className={`relative z-10 w-1/3 flex justify-center items-center font-medium py-2 px-6 cursor-pointer transition-all duration-300 ${
+              selectedCategory === "all" ? "text-white" : "text-[#020E35]"
             }`}
           >
             All Category
-          </h1>
-          <h1
+          </div>
+
+          {/* Free Category */}
+          <div
             onClick={() => handleCategoryChange("free")}
-            className={`font-medium hover:bg-blue-600 rounded-full border-[1px] border-black hover:text-white duration-300 py-2 px-6 md:px-5 text-center md:text-center ${
-              selectedCategory === "free" ? "bg-blue-600 text-white" : ""
+            className={`relative z-10 w-1/3 flex justify-center items-center font-medium py-2 px-6 cursor-pointer transition-all duration-300 ${
+              selectedCategory === "free" ? "text-white" : "text-[#020E35]"
             }`}
           >
             Free Category
-          </h1>
-          <h1
+          </div>
+
+          {/* Premium Category */}
+          <div
             onClick={() => handleCategoryChange("premium")}
-            className={`font-medium hover:bg-blue-600 rounded-full border-[1px] border-black hover:text-white duration-300 py-2 px-6 md:px-5 text-center md:text-center ${
-              selectedCategory === "premium" ? "bg-blue-600 text-white" : ""
+            className={`relative z-10 w-1/3 flex justify-center items-center font-medium py-2 px-6 cursor-pointer transition-all duration-300 ${
+              selectedCategory === "premium" ? "text-white" : "text-[#020E35]"
             }`}
           >
             Premium Category
-          </h1>
+          </div>
         </div>
       </div>
 
-      {/* Render content based on selected category */}
-      {selectedCategory === "all" && <AllCategory />}
-      {selectedCategory === "premium" && <PremiumCategory />}
-      {selectedCategory === "free" && <FreeCategory />}
+      {/* Content Section */}
+      <div className="mt-8">
+        {/* Render content based on selected category */}
+        <div
+          className={`transition-opacity duration-500 ease-in-out ${
+            selectedCategory === "all" ? "opacity-100" : "opacity-0 absolute"
+          }`}
+        >
+          {selectedCategory === "all" && <AllCategory />}
+        </div>
+        <div
+          className={`transition-opacity duration-500 ease-in-out ${
+            selectedCategory === "free" ? "opacity-100" : "opacity-0 absolute"
+          }`}
+        >
+          {selectedCategory === "free" && <FreeCategory />}
+        </div>
+        <div
+          className={`transition-opacity duration-500 ease-in-out ${
+            selectedCategory === "premium" ? "opacity-100" : "opacity-0 absolute"
+          }`}
+        >
+          {selectedCategory === "premium" && <PremiumCategory />}
+        </div>
+      </div>
     </>
   );
 };

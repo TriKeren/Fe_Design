@@ -7,8 +7,8 @@ const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
     const [user, setUser] = useState(null);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
-    const [notificationVisible, setNotificationVisible] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
+    const [showMembershipModal, setShowMembershipModal] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -37,13 +37,13 @@ const Navbar = () => {
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-    }, [])
+    }, []);
 
     useEffect(() => {
         const checkUser = async () => {
             const { data, error } = await supabase.auth.getUser();
             if (data) {
-                setUser(data.user);
+                setUser(data.user); // Menyimpan user dari Supabase
             } else if (error) {
                 console.error("Error fetching user:", error);
             }
@@ -60,10 +60,6 @@ const Navbar = () => {
         navigate("/login");
     };
 
-    const goToMembership = () => {
-        navigate("/membership")
-    }
-
     const handleLogout = async () => {
         const { error } = await supabase.auth.signOut();
         if (error) {
@@ -73,14 +69,26 @@ const Navbar = () => {
             setIsClosing(true);
             setTimeout(() => {
                 setShowLogoutModal(false);
+                setShowMembershipModal(false);
                 setIsClosing(false);
             }, 300); // Match the animation duration
         }
     };
 
+    const openMembershipModal = () => {
+        setShowMembershipModal(true);
+    };
+
+    const closeMembershipModal = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            setShowMembershipModal(false);
+            setIsClosing(false);
+        }, 300); // Match the animation duration
+    };
+
     const openLogoutModal = () => {
         setShowLogoutModal(true);
-        setNotificationVisible(true);
     };
 
     const closeLogoutModal = () => {
@@ -94,11 +102,7 @@ const Navbar = () => {
     return (
         <>
             <nav
-                className={`sticky top-0 left-0 w-full z-10 py-4 md:py-0 transition-all duration-300 ${
-                    scrolled
-                        ? "bg-white/80 backdrop-blur-md"
-                        : "bg-[#D9D9D9]"
-                } lg:px-4 lg:max-w-screen-xl lg:mx-auto`}
+                className={`sticky top-0 left-0 w-full z-10 py-4 md:py-0 transition-all duration-300 backdrop-blur-md lg:px-12 lg:max-w-screen-xl lg:mx-auto`}
             >
                 <div className="container">
                     <div className={`flex items-center justify-between ${view ? "relative" : ""}`}>
@@ -140,7 +144,7 @@ const Navbar = () => {
                             </button>
                             <div
                                 id="nav-menu"
-                                className={`mt-4 lg:mt-0 absolute py-5 inset-x-0 bg-white shadow-lg rounded-lg px-4 w-full right-4 top-full lg:static lg:bg-transparent lg:max-w-full lg:shadow-none lg:rounded-none lg:flex ${
+                                className={`mt-4 lg:mt-0 absolute py-5 inset-x-0 bg-white shadow-lg rounded-lg w-full top-full lg:static lg:bg-transparent lg:max-w-full lg:shadow-none lg:rounded-none lg:flex ${
                                     view ? "block" : "hidden"
                                 }`}
                             >
@@ -163,40 +167,68 @@ const Navbar = () => {
                                     </li>
                                     <li className="mt-4 lg:hidden">
                                         {user ? (
-                                            <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap lg:mr-0 hover:bg-blue-500" onClick={openLogoutModal}>
-                                                Logout
+                                            <button
+                                                className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap lg:mr-0 hover:bg-blue-500"
+                                                onClick={openMembershipModal}
+                                            >
+                                                {user.user_metadata?.name || "User"} {/* Nama Pengguna */}
                                             </button>
                                         ) : (
-                                            <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap lg:mr-0 hover:bg-blue-500" onClick={goToLogin}>
+                                            <button
+                                                className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap lg:mr-0 hover:bg-blue-500"
+                                                onClick={goToLogin}
+                                            >
                                                 Login
                                             </button>
                                         )}
-                                    </li>
-                                    <li className="mt-2 lg:hidden">
-                                        <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black"  onClick={goToMembership}> 
-                                            Join Now
-                                        </button>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div className="hidden lg:flex items-center gap-2">
                             {user ? (
-                                <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-500" onClick={openLogoutModal}>
-                                    Logout
+                                <button
+                                    className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-lg hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-00"
+                                    onClick={openMembershipModal}
+                                >
+                                    {user.user_metadata?.name || "User"} {/* Nama Pengguna */}
                                 </button>
                             ) : (
-                                <button className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-500" onClick={goToLogin}>
+                                <button
+                                    className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-lg hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-700"
+                                    onClick={goToLogin}
+                                >
                                     Login
                                 </button>
                             )}
-                            <button className="w-full py-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl md:w-20 whitespace-nowrap lg:mr-0 hover:bg-transparent hover:text-black hover:border-black" onClick={goToMembership}>
-                                Join Now
-                            </button>
                         </div>
                     </div>
                 </div>
             </nav>
+
+            {showMembershipModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center">
+                    <div className={`bg-white shadow-lg p-4 rounded-lg w-[90%] max-w-xs ${isClosing ? 'animate-slideUp' : 'animate-slideDown'}`}>
+                        <p className="text-black text-center">
+                            {user?.user_metadata?.is_membership ? "You are a member!" : "You are not a member yet."}
+                        </p>
+                        <div className="mt-4 flex justify-center gap-4">
+                            <button
+                                onClick={handleLogout}
+                                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                            >
+                                Logout
+                            </button>
+                            <button
+                                onClick={closeMembershipModal}
+                                className="px-4 py-2 bg-gray-300 text-black rounded-md"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {showLogoutModal && (
             <div className={`fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center`}>
@@ -205,20 +237,20 @@ const Navbar = () => {
                     <div className="mt-4 flex justify-center gap-4">
                         <button
                             onClick={handleLogout}
-                            className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                            className="px-4 py-2 bg-blue-500 text-white rounded-md"
                         >
                             Logout
                         </button>
                         <button
                             onClick={closeLogoutModal}
-                            className="py-2 px-4 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
+                            className="px-4 py-2 bg-gray-300 text-black rounded-md"
                         >
                             Cancel
                         </button>
                     </div>
                 </div>
             </div>
-        )}
+            )}
         </>
     );
 };
