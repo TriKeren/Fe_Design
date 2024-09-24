@@ -4,7 +4,7 @@ import { supabase } from '../../supabase/supaclient';
 import Skeleton from './Skeleton';
 
 const HeroDetail = () => {
-    const { id } = useParams();
+    const { title } = useParams();
     const [product, setProduct] = useState(null);
     const [categoryName, setCategoryName] = useState('');
     const [error, setError] = useState(false);
@@ -17,7 +17,7 @@ const HeroDetail = () => {
                 const { data: productData, error: productError } = await supabase
                     .from('products')
                     .select('*')
-                    .eq('id', id)
+                    .eq('title', title)
                     .single();
 
                 if (productError) {
@@ -48,7 +48,7 @@ const HeroDetail = () => {
         };
 
         fetchProductAndCategory();
-    }, [id]);
+    }, [title]);
 
     const handleDownload = async () => {
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
