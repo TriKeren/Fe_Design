@@ -37,7 +37,7 @@ const Navbar = () => {
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-    }, [])
+    }, []);
 
     useEffect(() => {
         const checkUser = async () => {
@@ -55,6 +55,9 @@ const Navbar = () => {
             setScrolled(true);
         }
     }, [location]);
+
+    // Check if we are on a product detail page
+    const isProductDetailPage = location.pathname.startsWith("/product/");
 
     const goToLogin = () => {
         navigate("/login");
@@ -148,7 +151,9 @@ const Navbar = () => {
                                     <li className="relative group">
                                         <a
                                             href="#"
-                                            className="flex py-2 text-base transition-all duration-500 ease-in-out text-dark md:mx-4"
+                                            className={`flex py-2 text-base transition-all duration-500 ease-in-out md:mx-4 ${
+                                                isProductDetailPage ? "text-dark" : "text-blue-500 font-bold"
+                                            }`}
                                         >
                                             Home
                                         </a>
@@ -156,7 +161,9 @@ const Navbar = () => {
                                     <li className="relative group">
                                         <a
                                             href="#"
-                                            className="text-base text-dark py-2 md:mx-4 flex"
+                                            className={`text-base py-2 md:mx-4 flex ${
+                                                isProductDetailPage ? "text-blue-500 font-bold" : "text-dark"
+                                            }`}
                                         >
                                             Template Design
                                         </a>
@@ -202,18 +209,12 @@ const Navbar = () => {
             <div className={`fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center`}>
                 <div className={`bg-white shadow-lg p-4 rounded-lg w-[90%] max-w-xs ${isClosing ? 'animate-slideUp' : 'animate-slideDown'}`}>
                     <p className="text-black text-center">Are you sure you want to log out?</p>
-                    <div className="mt-4 flex justify-center gap-4">
-                        <button
-                            onClick={handleLogout}
-                            className="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                        >
-                            Logout
+                    <div className="flex justify-between mt-4">
+                        <button className="w-full py-2 mr-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap hover:bg-blue-500" onClick={handleLogout}>
+                            Yes
                         </button>
-                        <button
-                            onClick={closeLogoutModal}
-                            className="py-2 px-4 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
-                        >
-                            Cancel
+                        <button className="w-full py-2 ml-2 text-sm text-white transition-colors duration-300 ease-in-out bg-blue-500 border-2 border-transparent rounded-2xl hover:bg-transparent hover:text-black hover:border-black" onClick={closeLogoutModal}>
+                            No
                         </button>
                     </div>
                 </div>
