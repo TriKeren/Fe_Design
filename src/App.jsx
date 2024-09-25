@@ -8,13 +8,13 @@ import MembershipPage from "./pages/Membership"
 function App() {
   return (
     <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<LandingPage />}/>
-      <Route path="/product/:title" element={<DetailPage />} />
-      <Route path="/login" element={<Login />}/>
-      <Route path="/register" element={<Register />}/>
-      <Route path="/membership" element={<MembershipPage />}/>
-    </Routes>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/product/:title" element={<DetailPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/membership" element={<MembershipPage />} />
+      </Routes>
     </BrowserRouter>
   )
 }
