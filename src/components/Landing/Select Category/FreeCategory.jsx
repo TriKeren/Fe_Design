@@ -43,7 +43,7 @@ const FreeCategory = () => {
           : products.map((product) => (
             <Link
               key={product.id}
-              to={`/product/${product.id}`}
+              to={`/product/${product.title.toLowerCase()}`}
               className="rounded-xl overflow-hidden shadow-lg flex flex-col"
             >
               <div className="relative">
