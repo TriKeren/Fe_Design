@@ -27,9 +27,9 @@ const Category = () => {
           {/* All Category */}
           <div
             onClick={() => handleCategoryChange("all")}
-            className={`relative z-10 w-1/3 flex justify-center items-center font-medium py-2 px-6 cursor-pointer transition-all duration-300 ${
+            className={`relative z-10 w-1/3 flex justify-center items-center text-center font-medium py-2 px-6 cursor-pointer transition-all duration-300 ${
               selectedCategory === "all" ? "text-white" : "text-[#020E35]"
-            }`}
+            } text-sm md:text-base`} // Kelas ukuran font ditambahkan
           >
             All Category
           </div>
@@ -37,9 +37,9 @@ const Category = () => {
           {/* Free Category */}
           <div
             onClick={() => handleCategoryChange("free")}
-            className={`relative z-10 w-1/3 flex justify-center items-center font-medium py-2 px-6 cursor-pointer transition-all duration-300 ${
+            className={`relative z-10 w-1/3 flex justify-center items-center text-center font-medium py-2 px-6 cursor-pointer transition-all duration-300 ${
               selectedCategory === "free" ? "text-white" : "text-[#020E35]"
-            }`}
+            } text-sm md:text-base`} // Kelas ukuran font ditambahkan
           >
             Free Category
           </div>
@@ -47,9 +47,9 @@ const Category = () => {
           {/* Premium Category */}
           <div
             onClick={() => handleCategoryChange("premium")}
-            className={`relative z-10 w-1/3 flex justify-center items-center font-medium py-2 px-6 cursor-pointer transition-all duration-300 ${
+            className={`relative z-10 w-1/3 flex justify-center items-center text-center font-medium py-2 px-6 cursor-pointer transition-all duration-300 ${
               selectedCategory === "premium" ? "text-white" : "text-[#020E35]"
-            }`}
+            } text-sm md:text-base`} // Kelas ukuran font ditambahkan
           >
             Premium Category
           </div>
