@@ -46,24 +46,23 @@ const Navbar = () => {
                 setUser(JSON.parse(userData)); // Ambil user dari session storage
             }
         };
-    
+
         // Tambahkan listener untuk event userLoggedIn
         const handleUserLogin = () => {
             checkUser(); // Cek dan set user baru
         };
-    
+
         // Cek user pada mount
         checkUser();
-    
+
         // Daftarkan event listener
         window.addEventListener('userLoggedIn', handleUserLogin);
-    
+
         return () => {
             // Bersihkan event listener saat komponen di-unmount
             window.removeEventListener('userLoggedIn', handleUserLogin);
         };
     }, [location]);
-    
 
     // Check if we are on a product detail page
     const isProductDetailPage = location.pathname.startsWith("/product/");
@@ -163,8 +162,11 @@ const Navbar = () => {
                                     </li>
                                     <li className="mt-4 lg:hidden">
                                         {user ? (
-                                            <span className="w-full py-2 text-sm text-black text-center">
-                                                {user.user_metadata?.name || "User"} {/* Nama Pengguna */}
+                                            <span
+                                                className="w-full py-2 text-sm text-black text-center cursor-pointer"
+                                                onClick={openLogoutModal} // Menambahkan fungsi untuk membuka modal logout
+                                            >
+                                                {user.name || "User"}
                                             </span>
                                         ) : (
                                             <button
@@ -180,8 +182,11 @@ const Navbar = () => {
                         </div>
                         <div className="hidden lg:flex items-center gap-2">
                             {user ? (
-                                <span className="w-full py-2 text-sm text-black text-center">
-                                    {user.user_metadata?.name || "User"} {/* Nama Pengguna */}
+                                <span
+                                    className="w-full py-2 text-sm text-black text-center cursor-pointer"
+                                    onClick={openLogoutModal} // Menambahkan fungsi untuk membuka modal logout
+                                >
+                                    {user.name || "User"}
                                 </span>
                             ) : (
                                 <button
@@ -200,7 +205,7 @@ const Navbar = () => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center">
                     <div className={`bg-white shadow-lg p-4 rounded-lg w-[90%] max-w-xs ${isClosing ? 'animate-slideUp' : 'animate-slideDown'}`}>
                         <p className="text-black text-center">
-                            {user?.user_metadata?.is_membership ? "You are a member!" : "You are not a member yet."}
+                            {user?.is_membership ? "You are a member!" : "You are not a member yet."}
                         </p>
                         <div className="mt-4 flex justify-center gap-4">
                             <button
@@ -221,8 +226,8 @@ const Navbar = () => {
             )}
 
             {showLogoutModal && (
-                <div className={`fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center`}>
-                    <div className={`bg-white shadow-lg p-4 rounded-lg w-[90%] max-w-xs ${isClosing ? "animate-slideUp" : "animate-slideDown"}`}>
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center">
+                    <div className={`bg-white shadow-lg p-4 rounded-lg w-[90%] max-w-xs ${isClosing ? 'animate-slideUp' : 'animate-slideDown'}`}>
                         <p className="text-black text-center">Are you sure you want to log out?</p>
                         <div className="mt-4 flex justify-center gap-4">
                             <button
