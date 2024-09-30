@@ -1,99 +1,99 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "../supabase/supaclient";
+import React, { useState } from 'react';
+import { supabase } from '../supabase/supaclient'; // Import client Supabase
+import bcrypt from 'bcryptjs'; // Import bcrypt untuk verifikasi password hash
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    });
-    const [errorMessage, setErrorMessage] = useState(null); 
-    const navigate = useNavigate();
+  const [email, setEmail] = useState(''); // State untuk email
+  const [password, setPassword] = useState(''); // State untuk password
+  const [errorMessage, setErrorMessage] = useState(''); // State untuk pesan error
+  const navigate = useNavigate(); // Untuk navigasi ke halaman lain setelah login berhasil
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
+  // Fungsi untuk menangani form submit
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Mencegah reload halaman saat submit form
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const { email, password } = formData;
-    
-        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-    
-        if (signInError) {
-            console.error('Login error:', signInError.message);
-            setErrorMessage('Invalid email or password');
-        } else {
-            console.log('User signed in');
-            const { data, error: fetchError } = await supabase
-                .from('users')
-                .select('*')
-                .eq('email', email);
-    
-            if (fetchError) {
-                console.error('Fetch error:', fetchError.message);
-                setErrorMessage('Error fetching user data');
-            } else {
-                console.log('User data fetched:', data);
-                setErrorMessage(null);
-                navigate('/');
-            }
-        }
-    };
-    
+    try {
+      // Ambil user berdasarkan email dari tabel `users`
+      const { data: user, error } = await supabase
+        .from('users')
+        .select('email, password')
+        .eq('email', email)
+        .single(); // Mengambil satu hasil yang cocok dengan email
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-                <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+      // Jika tidak ada user atau terjadi error
+      if (error || !user) {
+        setErrorMessage('Email tidak ditemukan atau salah.');
+        return;
+      }
 
-                {errorMessage && (
-                    <p className="text-red-500 text-center mb-4">{errorMessage}</p> // Tampilkan pesan error
-                )}
+      // Verifikasi password menggunakan bcrypt
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        setErrorMessage('Password salah.');
+        return;
+      }
 
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Email</label>
-                        <input 
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" 
-                            placeholder="Enter your email"
-                            required
-                        />
-                    </div>
+      // Jika login berhasil
+      console.log('Login successful');
+      
+      // Redirect ke halaman dashboard atau halaman lain setelah login sukses
+      navigate('/');
+    } catch (error) {
+      console.error('Error:', error);
+      setErrorMessage('Terjadi kesalahan saat login.');
+    }
+  };
 
-                    <div className="mb-6">
-                        <label className="block text-gray-700">Password</label>
-                        <input 
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" 
-                            placeholder="Enter your password"
-                            required
-                        />
-                    </div>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700">Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="Masukkan email"
+              required
+            />
+          </div>
 
-                    <button type="submit"
-                        className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-200">
-                        Login
-                    </button>
-                </form>
+          <div className="mb-4">
+            <label className="block text-gray-700">Password:</label>
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="Masukkan password"
+              required
+            />
+          </div>
 
-                <p className="mt-4 text-center">
-                    Don't have an account? <Link to="/register" className="text-blue-500 hover:underline">Register</Link>
-                </p>
-            </div>
-        </div>
-    );
-}
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-200"
+          >
+            Login
+          </button>
+        </form>
+
+        {errorMessage && (
+          <p className="mt-4 text-red-500 text-center">{errorMessage}</p>
+        )}
+
+        <p className="mt-4 text-center">
+          Belum punya akun? <a href="/register" className="text-blue-500 hover:underline">Daftar</a>
+        </p>
+      </div>
+    </div>
+  );
+};
 
 export default Login;
