@@ -53,41 +53,43 @@ const HeroDetail = () => {
 
     const handleDownload = async () => {
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-
+    
+        // Pastikan sesi ada
         if (sessionError || !sessionData.session) {
+            console.log('User is not logged in, redirecting to login...');
             navigate('/login');
             return;
         }
-
+    
         const user = sessionData.session.user;
-
+    
         const { data: userData, error: userError } = await supabase
             .from('users')
             .select('id, is_membership')
             .eq('email', user.email)
             .single();
-
+    
         if (userError) {
             console.error('Error fetching user data:', userError);
             return;
         }
-
+    
         if (!userData) {
             console.error('User not found for email:', user.email);
             return;
         }
-
+    
         if (product.is_premium) {
             if (!userData.is_membership) {
                 setShowModal(true); // Tampilkan modal kalau belum membership
                 return;
             }
-
+    
             alert('You can download the product now!');
         } else {
             alert('You can download the product for free!');
         }
-    };
+    };    
 
     const closeModal = () => {
         setShowModal(false);

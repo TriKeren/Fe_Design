@@ -10,41 +10,24 @@ const Login = () => {
     const navigate = useNavigate(); // Untuk navigasi ke halaman lain setelah login berhasil
 
     // Fungsi untuk menangani form submit
-    const handleSubmit = async (e) => {
+   const handleSubmit = async (e) => {
     e.preventDefault(); // Mencegah reload halaman saat submit form
 
     try {
-        // Ambil user berdasarkan email dari tabel `users`
-        const { data: user, error } = await supabase
-            .from('users')
-            .select('email, password')
-            .eq('email', email) // Menggunakan .eq untuk filter
-            .single(); // Ambil satu hasil
+        const { user, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
+        });
 
-        // Jika tidak ada user atau terjadi error
         if (error) {
-            console.error('Error fetching user:', error);
-            setErrorMessage('Email tidak ditemukan atau salah.');
-            return;
-        }
-
-        // Verifikasi password menggunakan bcrypt
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
-            setErrorMessage('Password salah.');
+            setErrorMessage('Login gagal: ' + error.message);
             return;
         }
 
         // Jika login berhasil
-        console.log('Login successful');
-        
-        // Set user di session storage
-        sessionStorage.setItem('user', JSON.stringify(user));
+        console.log('Login berhasil:', user);
 
-        // Emit event untuk memberitahu navbar
-        window.dispatchEvent(new Event('userLoggedIn'));
-
-        // Redirect ke halaman dashboard atau halaman lain setelah login sukses
+        // Arahkan ke halaman dashboard
         navigate('/');
     } catch (error) {
         console.error('Error during login:', error);
