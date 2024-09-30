@@ -9,7 +9,7 @@ const HeroDetail = () => {
     const [categoryName, setCategoryName] = useState('');
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [showModal, setShowModal] = useState(false); // State buat modal
+    const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,7 +17,7 @@ const HeroDetail = () => {
             try {
                 const { data: productData, error: productError } = await supabase
                     .from('products')
-                    .select('*')
+                    .select('*, source_file') // Include source_file here
                     .ilike('title', title)
                     .single();
 
@@ -53,43 +53,44 @@ const HeroDetail = () => {
 
     const handleDownload = async () => {
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-    
-        // Pastikan sesi ada
+
         if (sessionError || !sessionData.session) {
             console.log('User is not logged in, redirecting to login...');
             navigate('/login');
             return;
         }
-    
+
         const user = sessionData.session.user;
-    
+
         const { data: userData, error: userError } = await supabase
             .from('users')
             .select('id, is_membership')
             .eq('email', user.email)
             .single();
-    
+
         if (userError) {
             console.error('Error fetching user data:', userError);
             return;
         }
-    
+
         if (!userData) {
             console.error('User not found for email:', user.email);
             return;
         }
-    
-        if (product.is_premium) {
-            if (!userData.is_membership) {
-                setShowModal(true); // Tampilkan modal kalau belum membership
-                return;
-            }
-    
-            alert('You can download the product now!');
-        } else {
-            alert('You can download the product for free!');
+
+        if (product.is_premium && !userData.is_membership) {
+            setShowModal(true); // Show modal if not a member
+            return;
         }
-    };    
+
+        // Check if source_file exists and use it for download URL
+        if (product.source_file) {
+            const downloadUrl = product.source_file.replace(/\/view\?usp=sharing$/, '/uc?export=download'); // Ubah link ke format unduhan
+            window.open(downloadUrl, '_self'); // Mengunduh file langsung
+        } else {
+            alert('Link unduh tidak tersedia.');
+        }
+    };
 
     const closeModal = () => {
         setShowModal(false);
@@ -209,7 +210,7 @@ const HeroDetail = () => {
                     </div>
                 </div>
             )}
-        </section> 
+        </section>
     );
 };
 
