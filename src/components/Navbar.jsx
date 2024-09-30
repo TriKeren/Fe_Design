@@ -40,21 +40,30 @@ const Navbar = () => {
     }, []);
 
     useEffect(() => {
-        const checkUser = async () => {
-            const { data, error } = await supabase.auth.getUser();
-            if (data) {
-                setUser(data.user); // Menyimpan user dari Supabase
-            } else if (error) {
-                console.error("Error fetching user:", error);
+        const checkUser = () => {
+            const userData = sessionStorage.getItem('user');
+            if (userData) {
+                setUser(JSON.parse(userData)); // Ambil user dari session storage
             }
         };
-
+    
+        // Tambahkan listener untuk event userLoggedIn
+        const handleUserLogin = () => {
+            checkUser(); // Cek dan set user baru
+        };
+    
+        // Cek user pada mount
         checkUser();
-
-        if (location.pathname.includes("/")) {
-            setScrolled(true);
-        }
+    
+        // Daftarkan event listener
+        window.addEventListener('userLoggedIn', handleUserLogin);
+    
+        return () => {
+            // Bersihkan event listener saat komponen di-unmount
+            window.removeEventListener('userLoggedIn', handleUserLogin);
+        };
     }, [location]);
+    
 
     // Check if we are on a product detail page
     const isProductDetailPage = location.pathname.startsWith("/product/");
@@ -124,40 +133,22 @@ const Navbar = () => {
                                 id="hamburger"
                                 name="hamburger"
                                 type="button"
-                                className={`block absolute border border-[#CED2DA] right-4 md:right-8 py-3 px-2 rounded-lg lg:hidden ${
-                                    view ? "active" : ""
-                                }`}
+                                className={`block absolute border border-[#CED2DA] right-4 md:right-8 py-3 px-2 rounded-lg lg:hidden ${view ? "active" : ""}`}
                                 onClick={toggleMenu}
                             >
-                                <span
-                                    className={`w-[20px] h-[2px] block bg-[#344051] transition-transform duration-300 ease-in-out transform ${
-                                        view ? "rotate-45 translate-y-[6.5px]" : ""
-                                    }`}
-                                />
-                                <span
-                                    className={`w-[20px] h-[2px] block bg-[#344051] transition-all duration-300 ease-in-out my-1 ${
-                                        view ? "opacity-0" : "opacity-100"
-                                    }`}
-                                />
-                                <span
-                                    className={`w-[20px] h-[2px] block bg-[#344051] transition-transform duration-300 ease-in-out transform ${
-                                        view ? "-rotate-45 -translate-y-[5.5px]" : ""
-                                    }`}
-                                />
+                                <span className={`w-[20px] h-[2px] block bg-[#344051] transition-transform duration-300 ease-in-out transform ${view ? "rotate-45 translate-y-[6.5px]" : ""}`} />
+                                <span className={`w-[20px] h-[2px] block bg-[#344051] transition-all duration-300 ease-in-out my-1 ${view ? "opacity-0" : "opacity-100"}`} />
+                                <span className={`w-[20px] h-[2px] block bg-[#344051] transition-transform duration-300 ease-in-out transform ${view ? "-rotate-45 -translate-y-[5.5px]" : ""}`} />
                             </button>
                             <div
                                 id="nav-menu"
-                                className={`mt-4 lg:mt-0 absolute py-5 inset-x-0 bg-white shadow-lg rounded-lg w-full top-full lg:static lg:bg-transparent lg:max-w-full lg:shadow-none lg:rounded-none lg:flex ${
-                                    view ? "block" : "hidden"
-                                }`}
+                                className={`mt-4 lg:mt-0 absolute py-5 inset-x-0 bg-white shadow-lg rounded-lg w-full top-full lg:static lg:bg-transparent lg:max-w-full lg:shadow-none lg:rounded-none lg:flex ${view ? "block" : "hidden"}`}
                             >
                                 <ul className="block lg:flex">
                                     <li className="relative group">
                                         <a
                                             href="#"
-                                            className={`flex py-2 text-base transition-all duration-500 ease-in-out md:mx-4 ${
-                                                isProductDetailPage ? "text-dark" : "text-blue-500 font-bold"
-                                            }`}
+                                            className={`flex py-2 text-base transition-all duration-500 ease-in-out md:mx-4 ${isProductDetailPage ? "text-dark" : "text-blue-500 font-bold"}`}
                                         >
                                             Home
                                         </a>
@@ -165,21 +156,16 @@ const Navbar = () => {
                                     <li className="relative group">
                                         <a
                                             href="#"
-                                            className={`text-base py-2 md:mx-4 flex ${
-                                                isProductDetailPage ? "text-blue-500 font-bold" : "text-dark"
-                                            }`}
+                                            className={`text-base py-2 md:mx-4 flex ${isProductDetailPage ? "text-blue-500 font-bold" : "text-dark"}`}
                                         >
                                             Product
                                         </a>
                                     </li>
                                     <li className="mt-4 lg:hidden">
                                         {user ? (
-                                            <button
-                                                className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap lg:mr-0 hover:bg-blue-500"
-                                                onClick={openMembershipModal}
-                                            >
+                                            <span className="w-full py-2 text-sm text-black text-center">
                                                 {user.user_metadata?.name || "User"} {/* Nama Pengguna */}
-                                            </button>
+                                            </span>
                                         ) : (
                                             <button
                                                 className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-2xl hover:text-white hover:border-transparent textgray whitespace-nowrap lg:mr-0 hover:bg-blue-500"
@@ -194,12 +180,9 @@ const Navbar = () => {
                         </div>
                         <div className="hidden lg:flex items-center gap-2">
                             {user ? (
-                                <button
-                                    className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-lg hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-500"
-                                    onClick={openMembershipModal}
-                                >
+                                <span className="w-full py-2 text-sm text-black text-center">
                                     {user.user_metadata?.name || "User"} {/* Nama Pengguna */}
-                                </button>
+                                </span>
                             ) : (
                                 <button
                                     className="w-full py-2 text-sm text-black transition-colors duration-300 ease-in-out bg-transparent border-2 border-black rounded-lg hover:text-white hover:border-transparent textgray md:w-20 whitespace-nowrap lg:mr-0 hover:bg-blue-700"
@@ -252,7 +235,7 @@ const Navbar = () => {
                                 onClick={closeLogoutModal}
                                 className="px-4 py-2 bg-gray-300 text-black rounded-md"
                             >
-                                Cancel
+                                No
                             </button>
                         </div>
                     </div>
