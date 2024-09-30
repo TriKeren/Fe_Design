@@ -8,7 +8,6 @@ const Navbar = () => {
     const [user, setUser] = useState(null);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
-    const [showMembershipModal, setShowMembershipModal] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -39,33 +38,21 @@ const Navbar = () => {
         };
     }, []);
 
+    // Mengambil data user dari session atau Supabase
     useEffect(() => {
-        const checkUser = () => {
-            const userData = sessionStorage.getItem('user');
-            if (userData) {
-                setUser(JSON.parse(userData)); // Ambil user dari session storage
+        const checkUser = async () => {
+            // Mengambil data user dari session auth Supabase
+            const { data } = await supabase.auth.getUser();
+            if (data?.user) {
+                setUser({
+                    email: data.user.email, // Ambil email user
+                    name: data.user.user_metadata?.name || "User", // Ambil nama dari user_metadata, fallback ke "User"
+                });
             }
         };
 
-        // Tambahkan listener untuk event userLoggedIn
-        const handleUserLogin = () => {
-            checkUser(); // Cek dan set user baru
-        };
-
-        // Cek user pada mount
         checkUser();
-
-        // Daftarkan event listener
-        window.addEventListener('userLoggedIn', handleUserLogin);
-
-        return () => {
-            // Bersihkan event listener saat komponen di-unmount
-            window.removeEventListener('userLoggedIn', handleUserLogin);
-        };
     }, [location]);
-
-    // Check if we are on a product detail page
-    const isProductDetailPage = location.pathname.startsWith("/product/");
 
     const goToLogin = () => {
         navigate("/login");
@@ -80,22 +67,9 @@ const Navbar = () => {
             setIsClosing(true);
             setTimeout(() => {
                 setShowLogoutModal(false);
-                setShowMembershipModal(false);
                 setIsClosing(false);
             }, 300); // Match the animation duration
         }
-    };
-
-    const openMembershipModal = () => {
-        setShowMembershipModal(true);
-    };
-
-    const closeMembershipModal = () => {
-        setIsClosing(true);
-        setTimeout(() => {
-            setShowMembershipModal(false);
-            setIsClosing(false);
-        }, 300); // Match the animation duration
     };
 
     const openLogoutModal = () => {
@@ -112,9 +86,7 @@ const Navbar = () => {
 
     return (
         <>
-            <nav
-                className={`sticky top-0 left-0 w-full z-10 py-4 md:py-0 transition-all duration-300 backdrop-blur-md lg:px-12 lg:max-w-screen-xl lg:mx-auto`}
-            >
+            <nav className="sticky top-0 left-0 w-full z-10 py-4 md:py-0 transition-all duration-300 backdrop-blur-md lg:px-12 lg:max-w-screen-xl lg:mx-auto">
                 <div className="container">
                     <div className={`flex items-center justify-between ${view ? "relative" : ""}`}>
                         <div className="flex px-4 text-center">
@@ -147,7 +119,7 @@ const Navbar = () => {
                                     <li className="relative group">
                                         <a
                                             href="#"
-                                            className={`flex py-2 text-base transition-all duration-500 ease-in-out md:mx-4 ${isProductDetailPage ? "text-dark" : "text-blue-500 font-bold"}`}
+                                            className="flex py-2 text-base transition-all duration-500 ease-in-out md:mx-4 text-blue-500 font-bold"
                                         >
                                             Home
                                         </a>
@@ -155,7 +127,7 @@ const Navbar = () => {
                                     <li className="relative group">
                                         <a
                                             href="#"
-                                            className={`text-base py-2 md:mx-4 flex ${isProductDetailPage ? "text-blue-500 font-bold" : "text-dark"}`}
+                                            className="text-base py-2 md:mx-4 flex text-dark"
                                         >
                                             Product
                                         </a>
@@ -164,7 +136,7 @@ const Navbar = () => {
                                         {user ? (
                                             <span
                                                 className="w-full py-2 text-sm text-black text-center cursor-pointer"
-                                                onClick={openLogoutModal} // Menambahkan fungsi untuk membuka modal logout
+                                                onClick={openLogoutModal}
                                             >
                                                 {user.name || "User"}
                                             </span>
@@ -184,7 +156,7 @@ const Navbar = () => {
                             {user ? (
                                 <span
                                     className="w-full py-2 text-sm text-black text-center cursor-pointer"
-                                    onClick={openLogoutModal} // Menambahkan fungsi untuk membuka modal logout
+                                    onClick={openLogoutModal}
                                 >
                                     {user.name || "User"}
                                 </span>
@@ -200,30 +172,6 @@ const Navbar = () => {
                     </div>
                 </div>
             </nav>
-
-            {showMembershipModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center">
-                    <div className={`bg-white shadow-lg p-4 rounded-lg w-[90%] max-w-xs ${isClosing ? 'animate-slideUp' : 'animate-slideDown'}`}>
-                        <p className="text-black text-center">
-                            {user?.is_membership ? "You are a member!" : "You are not a member yet."}
-                        </p>
-                        <div className="mt-4 flex justify-center gap-4">
-                            <button
-                                onClick={handleLogout}
-                                className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                            >
-                                Logout
-                            </button>
-                            <button
-                                onClick={closeMembershipModal}
-                                className="px-4 py-2 bg-gray-300 text-black rounded-md"
-                            >
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {showLogoutModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center">
