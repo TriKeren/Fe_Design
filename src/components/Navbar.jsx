@@ -169,7 +169,7 @@ const Navbar = () => {
                                                 isProductDetailPage ? "text-blue-500 font-bold" : "text-dark"
                                             }`}
                                         >
-                                            Template Design
+                                            Product
                                         </a>
                                     </li>
                                     <li className="mt-4 lg:hidden">
